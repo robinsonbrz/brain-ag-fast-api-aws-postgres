@@ -1,7 +1,5 @@
 from fastapi import APIRouter
+from brain_app.api import produtor_routes
 
 router = APIRouter()
-
-@router.get("/")
-async def root():
-    return {"message": "Root"}
+router.include_router(produtor_routes.router)
