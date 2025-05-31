@@ -5,12 +5,18 @@ RUN mkdir -p /home/app
 RUN groupadd app && useradd -g app app
 
 ENV APP_HOME=/home/app/src
+ENV PYTHONPATH=/home/app/src
+
 RUN mkdir -p $APP_HOME
 WORKDIR $APP_HOME
 
 COPY requirements.txt $APP_HOME
+RUN chown -R app:app /home
+USER app
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-RUN chown -R app:app /home
-USER app
+ENV PATH="/home/app/.local/bin:${PATH}"
+
+
+
