@@ -19,7 +19,7 @@ class ProdutorBase(BaseModel):
                 raise ValueError('CNPJ inválido')
         else:
             raise ValueError('CPF ou CNPJ deve ter 11 ou 14 dígitos')
-        return v
+        return v_clean
 
 
 class ProdutorCreate(ProdutorBase):
@@ -42,7 +42,7 @@ class ProdutorUpdate(BaseModel):
                 raise ValueError('CNPJ inválido')
         else:
             raise ValueError('CPF ou CNPJ deve ter 11 ou 14 dígitos')
-        return v
+        return v_clean
 
 
 class ProdutorRead(ProdutorBase):
