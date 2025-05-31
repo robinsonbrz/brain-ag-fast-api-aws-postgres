@@ -12,16 +12,19 @@ def list_produtores(skip: int = Query(0, ge=0), limit: int = Query(100, gt=0), d
     produtores = service.get_produtores(skip=skip, limit=limit)
     return produtores
 
-@router.get("/{produtor_id}", response_model=ProdutorRead)
-def get_produtor(produtor_id: int, db: Session = Depends(get_db)):
+@router.get("/{cpf_cnpj}", response_model=ProdutorRead)
+def get_produtor_por_cpf_cnpj(cpf_cnpj: str, db: Session = Depends(get_db)):
     service = ProdutorService(db)
-    produtor = service.get_produtor(produtor_id)
+    produtor = service.get_produtor_por_cpf_cnpj(cpf_cnpj)
     if not produtor:
         raise HTTPException(status_code=404, detail="Produtor não encontrado")
     return produtor
 
+
 @router.post("/", response_model=ProdutorRead, status_code=201)
-def create_produtor(produtor_create: ProdutorCreate, db: Session = Depends(get_db)):
+def create_produtor(
+    produtor_create: ProdutorCreate, 
+    db: Session = Depends(get_db)):
     service = ProdutorService(db)
     try:
         produtor = service.create_produtor(produtor_create)
@@ -29,20 +32,24 @@ def create_produtor(produtor_create: ProdutorCreate, db: Session = Depends(get_d
         raise HTTPException(status_code=400, detail=str(e))
     return produtor
 
-@router.put("/{produtor_id}", response_model=ProdutorRead)
-def update_produtor(produtor_id: int, produtor_update: ProdutorUpdate, db: Session = Depends(get_db)):
+@router.put("/{cpf_cnpj}", response_model=ProdutorRead)
+def update_produtor_por_cpf_cnpj(
+    cpf_cnpj: str, 
+    produtor_update: ProdutorUpdate, 
+    db: Session = Depends(get_db)
+):
     service = ProdutorService(db)
     try:
-        produtor = service.update_produtor(produtor_id, produtor_update)
+        produtor = service.update_produtor_por_cpf_cnpj(cpf_cnpj, produtor_update)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     return produtor
 
-@router.delete("/{produtor_id}", status_code=204)
-def delete_produtor(produtor_id: int, db: Session = Depends(get_db)):
+@router.delete("/{cpf_cnpj}", status_code=204)
+def delete_produtor_por_cpf_cnpj(cpf_cnpj: str, db: Session = Depends(get_db)):
     service = ProdutorService(db)
     try:
-        service.delete_produtor(produtor_id)
+        service.delete_produtor_por_cpf_cnpj(cpf_cnpj)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     return

@@ -18,6 +18,7 @@ def test_criar_produtor(client):
     response = client.post("/produtores/", json=produtor_data)
     pprint(response.json())
     assert response.status_code == 201
+    pytest.produtor_cpf_cnpj = response.json()["cpf_cnpj"]
     pytest.produtor_id = response.json()["id"]
 
 @pytest.mark.order(8)
@@ -54,8 +55,8 @@ def test_atualizar_fazenda(client):
 def test_deletar_fazenda(client):
     response = client.delete(f"/fazendas/{pytest.fazenda_id}")
     assert response.status_code == 204
-    produtor_id = pytest.produtor_id
-    response = client.delete(f"/produtores/{produtor_id}")
+    produtor_cpf_cnpj = pytest.produtor_cpf_cnpj
+    response = client.delete(f"/produtores/{produtor_cpf_cnpj}")
     assert response.status_code == 204
 
 @pytest.mark.order(12)

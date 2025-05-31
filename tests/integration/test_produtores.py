@@ -10,33 +10,33 @@ def test_post_produtor_valido(client, db_session):
     assert response.status_code == 201
     produtor = response.json()
 
-    pytest.produtor_id = produtor["id"]
+    pytest.produtor_cpf_cnpj = response.json()["cpf_cnpj"]
     assert produtor["cpf_cnpj"] == limpar_mascara(produtor_data["cpf_cnpj"])
     assert produtor["nome_produtor"] == produtor_data["nome_produtor"]
 
 @pytest.mark.order(2)
-def test_get_produtor_por_id(client):
-    produtor_id = pytest.produtor_id
-    response = client.get(f"/produtores/{produtor_id}")
+def test_get_produtor_por_cpf_cnpj(client):
+    produtor_cpf_cnpj = pytest.produtor_cpf_cnpj
+    response = client.get(f"/produtores/{produtor_cpf_cnpj}")
     assert response.status_code == 200
-    assert response.json()["id"] == produtor_id
+    assert response.json()["cpf_cnpj"] == produtor_cpf_cnpj
 
 @pytest.mark.order(3)
 def test_put_atualizar_nome_produtor(client):
-    produtor_id = pytest.produtor_id
+    produtor_cpf_cnpj = pytest.produtor_cpf_cnpj
     update_data = {"nome_produtor": "João Atualizado"}
-    response = client.put(f"/produtores/{produtor_id}", json=update_data)
+    response = client.put(f"/produtores/{produtor_cpf_cnpj}", json=update_data)
     assert response.status_code == 200
     assert response.json()["nome_produtor"] == "João Atualizado"
 
 @pytest.mark.order(4)
 def test_delete_produtor(client):
-    produtor_id = pytest.produtor_id
-    response = client.delete(f"/produtores/{produtor_id}")
+    produtor_cpf_cnpj = pytest.produtor_cpf_cnpj
+    response = client.delete(f"/produtores/{produtor_cpf_cnpj}")
     assert response.status_code == 204
 
 @pytest.mark.order(5)
 def test_get_produtor_apos_delete(client):
-    produtor_id = pytest.produtor_id
-    response = client.get(f"/produtores/{produtor_id}")
+    produtor_cpf_cnpj = pytest.produtor_cpf_cnpj
+    response = client.get(f"/produtores/{produtor_cpf_cnpj}")
     assert response.status_code == 404

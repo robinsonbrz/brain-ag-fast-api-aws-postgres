@@ -7,8 +7,8 @@ class ProdutorService:
     def __init__(self, db: Session):
         self.repo = ProdutorRepository(db)
 
-    def get_produtor(self, produtor_id: int) -> Produtor | None:
-        return self.repo.get_by_id(produtor_id)
+    def get_produtor_por_cpf_cnpj(self, cpf_cnpj: str) -> Produtor | None:
+        return self.repo.get_by_cpf_cnpj(cpf_cnpj)
 
     def get_produtores(self, skip: int = 0, limit: int = 100) -> list[Produtor]:
         return self.repo.get_all(skip=skip, limit=limit)
@@ -34,9 +34,13 @@ class ProdutorService:
                 raise ValueError("Outro produtor com esse CPF/CNPJ já existe")
 
         return self.repo.update(produtor_db, produtor_update)
-
-    def delete_produtor(self, produtor_id: int) -> None:
-        produtor_db = self.repo.get_by_id(produtor_id)
+    
+    def update_produtor_por_cpf_cnpj(self, cpf_cnpj: str, produtor_update: ProdutorUpdate) -> Produtor:
+        produtor_db = self.repo.get_by_cpf_cnpj(cpf_cnpj)
         if not produtor_db:
             raise ValueError("Produtor não encontrado")
-        self.repo.delete(produtor_db)
+ 
+        return self.repo.update_by_cpf_cnpj(cpf_cnpj, produtor_update)
+
+    def delete_produtor_por_cpf_cnpj(self, cpf_cnpj: str) -> None:
+        self.repo.delete_by_cpf_cnpj(cpf_cnpj)
