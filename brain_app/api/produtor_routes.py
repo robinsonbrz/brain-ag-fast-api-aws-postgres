@@ -2,16 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from brain_app.schemas.produtor_schema import ProdutorCreate, ProdutorRead, ProdutorUpdate
 from brain_app.services.produtor_service import ProdutorService
-from brain_app.core.database import SessionLocal
+from brain_app.core.dependencies import get_db
 
 router = APIRouter(prefix="/produtores", tags=["produtores"])
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @router.get("/", response_model=list[ProdutorRead])
 def list_produtores(skip: int = Query(0, ge=0), limit: int = Query(100, gt=0), db: Session = Depends(get_db)):

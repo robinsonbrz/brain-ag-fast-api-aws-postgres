@@ -1,46 +1,41 @@
 import pytest
-from fastapi.testclient import TestClient
-from brain_app.main import app
-from brain_app.core.database import SessionLocal, Base, engine
-from sqlalchemy.orm import Session
+from pprint import pprint
 
-client = TestClient(app)
-
-@pytest.fixture(scope="module")
-def db_session():
-    # Criar todas as tabelas antes do teste
-    #Base.metadata.create_all(bind=engine)
-    db = SessionLocal()
-    yield db
-    db.close()
-    # Dropar tabelas após testes (limpeza)
-    # Base.metadata.drop_all(bind=engine)
-
-def test_crud_produtor(db_session: Session):
-    # POST criar produtor válido
-    produtor_data = {"cpf_cnpj": "12345678901", "nome_produtor": "João Silva"}
+@pytest.mark.order(1)
+def test_post_produtor_valido(client, db_session):
+    produtor_data = {"cpf_cnpj": "690.692.120-72", "nome_produtor": "Produtor Teste cpf fake"}
     response = client.post("/produtores/", json=produtor_data)
+    pprint(response.json())
     assert response.status_code == 201
     produtor = response.json()
+
+    pytest.produtor_id = produtor["id"]
     assert produtor["cpf_cnpj"] == produtor_data["cpf_cnpj"]
     assert produtor["nome_produtor"] == produtor_data["nome_produtor"]
-    produtor_id = produtor["id"]
 
-    # GET por id
+@pytest.mark.order(2)
+def test_get_produtor_por_id(client):
+    produtor_id = pytest.produtor_id
     response = client.get(f"/produtores/{produtor_id}")
     assert response.status_code == 200
     assert response.json()["id"] == produtor_id
 
-    # PUT atualizar nome
+@pytest.mark.order(3)
+def test_put_atualizar_nome_produtor(client):
+    produtor_id = pytest.produtor_id
     update_data = {"nome_produtor": "João Atualizado"}
     response = client.put(f"/produtores/{produtor_id}", json=update_data)
     assert response.status_code == 200
     assert response.json()["nome_produtor"] == "João Atualizado"
 
-    # DELETE
+@pytest.mark.order(4)
+def test_delete_produtor(client):
+    produtor_id = pytest.produtor_id
     response = client.delete(f"/produtores/{produtor_id}")
     assert response.status_code == 204
 
-    # GET após delete deve retornar 404
+@pytest.mark.order(5)
+def test_get_produtor_apos_delete(client):
+    produtor_id = pytest.produtor_id
     response = client.get(f"/produtores/{produtor_id}")
     assert response.status_code == 404
