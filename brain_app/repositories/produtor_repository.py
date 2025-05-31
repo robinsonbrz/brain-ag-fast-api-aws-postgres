@@ -1,14 +1,11 @@
 from sqlalchemy.orm import Session
 from brain_app.models.models import Produtor
 from brain_app.schemas.produtor_schema import ProdutorCreate, ProdutorUpdate
+from brain_app.utils.validators import limpar_mascara
 
 class ProdutorRepository:
     def __init__(self, db: Session):
         self.db = db
-
-    def get_by_cpf_cnpj(self, cpf_cnpj: str) -> Produtor | None:
-        return self.db.query(Produtor).filter(Produtor.cpf_cnpj == cpf_cnpj).first()
-
 
     def get_all(self, skip: int = 0, limit: int = 100) -> list[Produtor]:
         return self.db.query(Produtor).offset(skip).limit(limit).all()
@@ -24,7 +21,8 @@ class ProdutorRepository:
         return db_produtor
 
     def update_by_cpf_cnpj(self, cpf_cnpj: str, produtor_update: ProdutorUpdate) -> Produtor:
-        produtor_db = self.db.query(Produtor).filter(Produtor.cpf_cnpj == cpf_cnpj).first()
+        cpf_cnpj_limpo = limpar_mascara(cpf_cnpj)
+        produtor_db = self.db.query(Produtor).filter(Produtor.cpf_cnpj == cpf_cnpj_limpo).first()
         if not produtor_db:
             raise ValueError("Produtor não encontrado")
         
@@ -36,10 +34,12 @@ class ProdutorRepository:
         return produtor_db
 
     def get_by_cpf_cnpj(self, cpf_cnpj: str) -> Produtor | None:
-        return self.db.query(Produtor).filter(Produtor.cpf_cnpj == cpf_cnpj).first()
+        cpf_cnpj_limpo = limpar_mascara(cpf_cnpj)
+        return self.db.query(Produtor).filter(Produtor.cpf_cnpj == cpf_cnpj_limpo).first()    
     
     def delete_by_cpf_cnpj(self, cpf_cnpj: str) -> None:
-        produtor_db = self.db.query(Produtor).filter(Produtor.cpf_cnpj == cpf_cnpj).first()
+        cpf_cnpj_limpo = limpar_mascara(cpf_cnpj)
+        produtor_db = self.db.query(Produtor).filter(Produtor.cpf_cnpj == cpf_cnpj_limpo).first()
         if produtor_db:
             self.db.delete(produtor_db)
             self.db.commit()
