@@ -10,10 +10,13 @@ clear && pytest -s  tests
 #Todo validação de CPF e CNPJ
 #validar cpf e cnpj invalidos 
 # utilizar faker
+# tentar associar uma fazenda a um produtor id não existen99e
+# aprimorar testes
+# aplicar linters
 
 #TODO teste put com areas incompativeis
 
-
+# Makefile para testes e build dos containers
 
 
         

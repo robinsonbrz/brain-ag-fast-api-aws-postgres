@@ -25,9 +25,10 @@ def create_fazenda(fazenda_create: FazendaCreate, db: Session = Depends(get_db))
     service = FazendaService(db)
     try:
         fazenda = service.create_fazenda(fazenda_create)
+        return fazenda
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-    return fazenda
+    
 
 @router.put("/{fazenda_id}", response_model=FazendaRead)
 def update_fazenda(fazenda_id: int, fazenda_update: FazendaUpdate, db: Session = Depends(get_db)):
