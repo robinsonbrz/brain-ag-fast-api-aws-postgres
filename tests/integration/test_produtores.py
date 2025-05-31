@@ -1,5 +1,6 @@
 import pytest
 from pprint import pprint
+from brain_app.utils.validators import limpar_mascara
 
 @pytest.mark.order(1)
 def test_post_produtor_valido(client, db_session):
@@ -10,7 +11,7 @@ def test_post_produtor_valido(client, db_session):
     produtor = response.json()
 
     pytest.produtor_id = produtor["id"]
-    assert produtor["cpf_cnpj"] == produtor_data["cpf_cnpj"]
+    assert produtor["cpf_cnpj"] == limpar_mascara(produtor_data["cpf_cnpj"])
     assert produtor["nome_produtor"] == produtor_data["nome_produtor"]
 
 @pytest.mark.order(2)
