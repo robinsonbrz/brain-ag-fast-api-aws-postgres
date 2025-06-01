@@ -6,8 +6,8 @@ terraform {
 
   # Necessário salvar o estado do terraform em um bucket S3
   backend "s3" {
-    bucket = "tf-state-rob-brain-ag-06-2025"
-    key    = "estado/terraform.tfstate"
+    bucket         = "tf-state-rob-brain-ag-06-2025"
+    key            = "estado/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "terraform-brain-ag-lock-table"
     encrypt        = true
