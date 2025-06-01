@@ -117,7 +117,3 @@ resource "aws_lambda_function_url" "api" {
     max_age           = 86400
   }
 }
-
-output "api_url" {
-  value = aws_lambda_function_url.api.function_url
-}
