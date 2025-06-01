@@ -8,7 +8,9 @@ terraform {
   backend "s3" {
     bucket = "tf-state-rob-brain-ag-06-2025"
     key    = "estado/terraform.tfstate"
-    region = "us-east-1"
+    region         = "us-east-1"
+    dynamodb_table = "terraform-brain-ag-lock-table"
+    encrypt        = true
   }
 }
 
@@ -117,3 +119,11 @@ resource "aws_lambda_function_url" "api" {
     max_age           = 86400
   }
 }
+
+
+aws dynamodb create-table \
+  --table-name "terraform-brain-ag-lock-table" \
+  --attribute-definitions AttributeName=LockID,AttributeType=S \
+  --key-schema AttributeName=LockID,KeyType=HASH \
+  --billing-mode PAY_PER_REQUEST \
+  --region us-east-1
