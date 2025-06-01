@@ -1,4 +1,4 @@
-# Produtores Rurais API
+# Produtores Rurais API - Brain AG
 
 API REST para gerenciamento de produtores rurais, fazendas e culturas plantadas.
 
@@ -16,7 +16,7 @@ API REST para gerenciamento de produtores rurais, fazendas e culturas plantadas.
 - Deploy disparado pelo Github Actions, Terraform em AWS Lambda
 - Banco de Dados local containerizado
 - Banco de Dados Supabase para POC
-![Fluxo Git Lambda](assets/fluxo-terraform-git-actions.png)
+- ![Fluxo Git Lambda](assets/fluxo-terraform-git-actions.png)
 
 ---
 
@@ -104,6 +104,13 @@ docker exec -ti brain-ag_api_1 pytest --cov=brain_app --cov-report=html tests/
 ```
 
 Depois, abra o arquivo `htmlcov/index.html` no navegador para visualizar o relatório.
+---
+
+## ☁️ Acesso a api - Postman ou Swagger
+
+É possível testar a api pelo Swagger Postman, Curl, biblioteca requests ou axios.
+
+- ![Swagger-Lambda](assets/api-endpoint-dashboard.png)
 
 ---
 
@@ -195,7 +202,7 @@ Existe uma documentação adicional sobre como foi configurado o Terraform em
 
 Quando o deploy for bem sucedido nos logs do Terraform apply é possível encontrar a url da api Lambda.
 
-![Url Lambda](assets/url-terraform.png)
+- ![Url Lambda](assets/url-terraform.png)
 
 
 No caso do último deploy a url foi:
@@ -207,6 +214,28 @@ Então o swagger e docs podem ser acessados em:
 https://e6tapmvglgzukwqjoyzafqh2cm0rtidz.lambda-url.us-east-1.on.aws/redoc
 
 https://e6tapmvglgzukwqjoyzafqh2cm0rtidz.lambda-url.us-east-1.on.aws/docs
+
+---
+
+## ☁️ Logs
+
+Os logs nesta aplicação são retidos na AWS, e podem ser visualizados no serviço CloudWatch.
+
+![Url Lambda](assets/logs-aws-cloudwatch.png)
+
+---
+
+## Próximos passos e Conclusão
+
+Esta é uma POC que apresenta uma solução robusta para Deploy de Apis, e pode servir como boilerplate para início de uma api FastApi com pipeline funcional com as ferramentas mais atuais e populares de Cloud, como Terraform e AWS. 
+
+- Melhoria nos testes unitários e documentação do Swagger
+- Adição de pre commit com linters
+- Inserção de step de linters, tests com mínimo coverage na pipeline de deploy.
+- Segurança dos endpoints com Authorization JWT Tokens
+- Aplicar Técnicas comuns de rate limiting, que pode ser implementado com AWS Api Gateway
+- Utilizar um DNS apontando para um endereço mais amigável
+
 ---
 
 ## 📞 Contato
