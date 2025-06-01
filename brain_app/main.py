@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from brain_app.api import routes
 from brain_app.core import init_db
 from contextlib import asynccontextmanager
+from brain_app.core.exception_middleware import ExceptionLoggingMiddleware
+from brain_app.core.logging_middleware import LoggingMiddleware
 
 
 from brain_app.core import init_db
@@ -20,6 +22,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(LoggingMiddleware)
+app.add_middleware(ExceptionLoggingMiddleware)
 
 @app.get("/health-check")
 async def health_check():

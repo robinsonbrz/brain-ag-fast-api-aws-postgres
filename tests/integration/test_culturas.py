@@ -93,8 +93,9 @@ def test_deletar_fazenda(client):
     response = client.delete(f"/produtores/{produtor_cpf_cnpj}")
     assert response.status_code == 204
 
-@pytest.mark.order(22)
+@pytest.mark.order(30)
 def test_get_cultura_after_delete(client):
     cultura_id = pytest.cultura_id
     res = client.get(f"/culturas/{cultura_id}")
+    pprint(res.json())
     assert res.status_code == 404

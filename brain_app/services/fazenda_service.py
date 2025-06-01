@@ -18,7 +18,6 @@ class FazendaService:
         produtor = self.db.query(Produtor).filter(Produtor.id == fazenda_create.produtor_id).first()
         if not produtor:
             raise ValueError(f"Produtor com id {fazenda_create.produtor_id} não encontrado")
-
         fazenda = self.repo.create(fazenda_create)
         return fazenda
 

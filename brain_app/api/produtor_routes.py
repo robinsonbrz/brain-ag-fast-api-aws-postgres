@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from brain_app.schemas.produtor_schema import ProdutorCreate, ProdutorRead, ProdutorUpdate
 from brain_app.services.produtor_service import ProdutorService
 from brain_app.core.dependencies import get_db
+from brain_app.core.logging_config import logger
+import traceback
 
 router = APIRouter(prefix="/produtores", tags=["produtores"])
 
@@ -17,9 +19,9 @@ def get_produtor_por_cpf_cnpj(cpf_cnpj: str, db: Session = Depends(get_db)):
     service = ProdutorService(db)
     produtor = service.get_produtor_por_cpf_cnpj(cpf_cnpj)
     if not produtor:
+        logger.error(f"Erro ao solicitar um produtor: \n{traceback.format_exc()}")
         raise HTTPException(status_code=404, detail="Produtor não encontrado")
     return produtor
-
 
 @router.post("/", response_model=ProdutorRead, status_code=201)
 def create_produtor(
@@ -29,6 +31,7 @@ def create_produtor(
     try:
         produtor = service.create_produtor(produtor_create)
     except ValueError as e:
+        logger.error(f"Erro ao criar um produtor: {e}\n{traceback.format_exc()}")
         raise HTTPException(status_code=400, detail=str(e))
     return produtor
 
@@ -42,6 +45,7 @@ def update_produtor_por_cpf_cnpj(
     try:
         produtor = service.update_produtor_por_cpf_cnpj(cpf_cnpj, produtor_update)
     except ValueError as e:
+        logger.error(f"Erro ao atualizar um produtor: {e}\n{traceback.format_exc()}")
         raise HTTPException(status_code=404, detail=str(e))
     return produtor
 
@@ -51,5 +55,5 @@ def delete_produtor_por_cpf_cnpj(cpf_cnpj: str, db: Session = Depends(get_db)):
     try:
         service.delete_produtor_por_cpf_cnpj(cpf_cnpj)
     except ValueError as e:
+        logger.error(f"Erro ao deletar um produtor: {e}\n{traceback.format_exc()}")
         raise HTTPException(status_code=404, detail=str(e))
-    return

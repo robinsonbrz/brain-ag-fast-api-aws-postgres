@@ -25,4 +25,13 @@ pytest --cov=brain_app --cov-report=html tests/
 
 htmlcov/index.html
 
-        
+logs/app.log
+
+
+Configuração centralizada do logger direcionado para stdout, ideal para AWS Lambda e CloudWatch.
+
+Middleware para logging das requisições HTTP.
+
+Estratégia para capturar e logar exceções não tratadas globalmente.
+
+Boas práticas para logar erros específicos nas rotas e serviços.

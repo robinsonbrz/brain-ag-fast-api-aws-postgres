@@ -32,7 +32,6 @@ class ProdutorService:
             ).first()
             if existing:
                 raise ValueError("Outro produtor com esse CPF/CNPJ já existe")
-
         return self.repo.update(produtor_db, produtor_update)
     
     def update_produtor_por_cpf_cnpj(self, cpf_cnpj: str, produtor_update: ProdutorUpdate) -> Produtor:
