@@ -27,7 +27,7 @@ def test_criar_fazenda(client):
         "produtor_id": pytest.produtor_id,
         "nome_fazenda": "Fazenda Teste",
         "cidade": "Cidade Teste",
-        "estado": "ST",
+        "estado": "SP",
         "area_total": 100.0,
         "area_agricultavel": 50.0,
         "area_vegetacao": 40.0

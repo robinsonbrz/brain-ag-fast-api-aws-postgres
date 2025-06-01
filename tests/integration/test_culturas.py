@@ -27,7 +27,7 @@ def test_criar_fazenda(client):
         "produtor_id": pytest.produtor_id,
         "nome_fazenda": "Fazenda Teste",
         "cidade": "Cidade Teste",
-        "estado": "ST",
+        "estado": "SP",
         "area_total": 100.0,
         "area_agricultavel": 50.0,
         "area_vegetacao": 40.0
@@ -73,6 +73,11 @@ def test_update_cultura(client):
     res = client.put(f"/culturas/{cultura_id}", json=cultura_data)
     assert res.status_code == 200
     assert res.json()["nome_cultura"] == "Milho"
+
+'''
+Teste de dashboard
+'''
+
 
 @pytest.mark.order(20)
 def test_delete_cultura(client):
