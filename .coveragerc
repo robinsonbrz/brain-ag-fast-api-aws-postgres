@@ -1,0 +1,5 @@
+[report]
+omit =
+    __init__.py
+    */__init__.py
+    main.py

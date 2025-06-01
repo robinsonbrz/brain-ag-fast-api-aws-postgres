@@ -19,4 +19,10 @@ clear && pytest -s  tests
 # Makefile para testes e build dos containers
 
 
+pytest --cov=brain_app --cov-report=term tests/
+
+pytest --cov=brain_app --cov-report=html tests/
+
+htmlcov/index.html
+
         
