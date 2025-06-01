@@ -5,6 +5,7 @@ from brain_app.core import init_db
 from contextlib import asynccontextmanager
 from brain_app.core.exception_middleware import ExceptionLoggingMiddleware
 from brain_app.core.logging_middleware import LoggingMiddleware
+from mangum import Mangum
 
 
 from brain_app.core import init_db
@@ -13,7 +14,7 @@ from brain_app.core import init_db
 async def lifespan(app: FastAPI):
     init_db.init_db()
     yield
-app = FastAPI(title="Produtores Rurais API", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="Api - Produtores Rurais - Brain AG", version="0.1.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,3 +31,5 @@ async def health_check():
     return {"status": "Healthy!"}
 
 app.include_router(routes.router)
+
+handler = Mangum(app)

@@ -16,7 +16,7 @@ API REST para gerenciamento de produtores rurais, fazendas e culturas plantadas.
 - Deploy disparado pelo Github Actions, Terraform em AWS Lambda
 - Banco de Dados local containerizado
 - Banco de Dados Supabase para POC
-![Fluxo Git Lambda](fluxo-terraform-git-actions.png)
+![Fluxo Git Lambda](assets/fluxo-terraform-git-actions.png)
 
 ---
 
@@ -24,6 +24,7 @@ API REST para gerenciamento de produtores rurais, fazendas e culturas plantadas.
 
 - Python 3.11  
 - FastAPI  
+- Swagger
 - SQLAlchemy ORM  
 - Pydantic para validação de dados  
 - PostgreSQL (Tembo.io para produção)  
@@ -35,6 +36,7 @@ API REST para gerenciamento de produtores rurais, fazendas e culturas plantadas.
 - Xubuntu Linux
 
 ---
+- ![Fluxo Git Lambda](assets/swagger.png)
 
 ## 🚀 Como executar localmente
 
@@ -189,7 +191,22 @@ Para que a pipeline Github Actions funcione é necessário adicionar essa variá
 Existe uma documentação adicional sobre como foi configurado o Terraform em 
 [infra-lambda/README-TF.md](infra-lambda/README-TF.md)
 
+---
 
+Quando o deploy for bem sucedido nos logs do Terraform apply é possível encontrar a url da api Lambda.
+
+![Url Lambda](assets/url-terraform.png)
+
+
+No caso do último deploy a url foi:
+
+https://e6tapmvglgzukwqjoyzafqh2cm0rtidz.lambda-url.us-east-1.on.aws
+
+Então o swagger e docs podem ser acessados em:
+
+https://e6tapmvglgzukwqjoyzafqh2cm0rtidz.lambda-url.us-east-1.on.aws/redoc
+
+https://e6tapmvglgzukwqjoyzafqh2cm0rtidz.lambda-url.us-east-1.on.aws/docs
 ---
 
 ## 📞 Contato
