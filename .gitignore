@@ -232,3 +232,7 @@ yarn-error.log*
 .env
 .env.dev
 .env.hml
+
+infra-lambda/.terraform.lock.hcl
+infra-lambda/.terraform/
+terraform_apply.sh

@@ -44,7 +44,7 @@ resource "null_resource" "image" {
   provisioner "local-exec" {
     command = <<EOF
       aws ecr get-login-password | docker login --username AWS --password-stdin ${local.repo_url}
-      docker build --platform linux/amd64 -t ${local.repo_url}:latest ../src
+      docker build --platform linux/amd64 -t ${local.repo_url}:latest ..
       docker push ${local.repo_url}:latest
     EOF
   }
