@@ -12,7 +12,11 @@ API REST para gerenciamento de produtores rurais, fazendas e culturas plantadas.
 - Dashboard com dados agregados para visualização de estatísticas.  
 - Testes unitários e integrados para garantir qualidade.  
 - Logs estruturados para monitoramento e diagnóstico.  
-- Dockerizado para fácil deploy e ambiente isolado.  
+- Dockerizado para fácil deploy e ambiente isolado.
+- Deploy disparado pelo Github Actions, Terraform em AWS Lambda
+- Banco de Dados local containerizado
+- Banco de Dados Supabase para POC
+![Fluxo Git Lambda](fluxo-terraform-git-actions.png)
 
 ---
 
@@ -26,6 +30,9 @@ API REST para gerenciamento de produtores rurais, fazendas e culturas plantadas.
 - Docker & Docker Compose  
 - Pytest para testes  
 - AWS Lambda (preparado para deployment)
+- Terraform
+- Github Actions
+- Xubuntu Linux
 
 ---
 
@@ -35,6 +42,7 @@ API REST para gerenciamento de produtores rurais, fazendas e culturas plantadas.
 
 - Docker e Docker Compose instalados  
 - Python 3.11 (opcional, para rodar local sem Docker)
+- Recomendo a utilização do Linux, mas é possível adapatar para executar com Windows
 
 ### Passos
 
@@ -57,12 +65,14 @@ DATABASE_URL=postgresql://postgres:password@db:5432/postgres
 3. Inicie os containers Docker (API + Postgres):
 
 ```bash
-docker-compose up --build
+docker-compose -f docker-compose-dev.yml down
+docker-compose -f docker-compose-dev.yml up -d --build
+docker exec -ti brain-ag_api_1 uvicorn brain_app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 4. Acesse a API em: `http://localhost:8000`
 
-5. Documentação interativa automática disponível em:  
+5. Documentação interativa automática padrão OpenApi disponível em:  
 `http://localhost:8000/docs` e em `http://localhost:8000/docs`
 
 ---
@@ -76,7 +86,7 @@ Comandos para rodar os testes:
 - Rodar todos os testes e mostrar saída detalhada:
 
 ```bash
-clear && pytest -vs tests
+docker exec -ti brain-ag_api_1 pytest -sv
 ```
 
 - Rodar testes com relatório de cobertura no terminal:
@@ -88,7 +98,7 @@ pytest --cov=brain_app --cov-report=term tests/
 - Gerar relatório de cobertura em HTML:
 
 ```bash
-pytest --cov=brain_app --cov-report=html tests/
+docker exec -ti brain-ag_api_1 pytest --cov=brain_app --cov-report=html tests/
 ```
 
 Depois, abra o arquivo `htmlcov/index.html` no navegador para visualizar o relatório.
@@ -102,7 +112,7 @@ Para facilitar o gerenciamento do projeto, criei um `Makefile` com os comandos p
 ### Build e start dos containers Docker
 
 ```bash
-make build
+make start
 ```
 
 * Este comando irá parar qualquer container rodando e recriar os containers da aplicação e banco (modo detached).
@@ -155,8 +165,9 @@ brain_app/
 tests/
 ├── integration/       # Testes integrados
 ├── unit/              # Testes unitários
-Dockerfile
-docker-compose.yml
+infra-lambda           # Arquivos Terraform
+Dockerfile             # Arquivo criação de imagem para deploy
+Dockerfile.dev         # Arquivo criação de imagem para Desenvolvimento Local
 README.md
 ```
 
@@ -168,9 +179,16 @@ A API está preparada para deployment em AWS Lambda e outros ambientes em nuvem.
 
 Para essa POC utilizei Supabase que tem uma configuração semelhante a essa, fictícia.
 
+
 ```env
 DATABASE_URL=postgresql://postgres.password:odsood0d034o3lk@aws-0-us-east-1.pooler.supabase.com:5432/postgres
 ```
+
+Para que a pipeline Github Actions funcione é necessário adicionar essa variável em Github Repo Secrets
+
+Existe uma documentação adicional sobre como foi configurado o Terraform em 
+[infra-lambda/README-TF.md](infra-lambda/README-TF.md)
+
 
 ---
 

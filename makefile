@@ -1,16 +1,15 @@
 .PHONY: build start test coverage open-coverage
 
-
-build:
-	docker-compose down && docker-compose up -d --build
+start:
+	docker-compose -f docker-compose-dev.yml down && docker-compose -f docker-compose-dev.yml up -d --build && docker exec -ti brain-ag_api_1 uvicorn brain_app.main:app --host 0.0.0.0 --port 8000 --reload
 
 stop:
-	docker-compose down
+	docker-compose -f docker-compose-dev.yml down
 
 test:
-	docker-compose run api pytest -sv
+	docker exec -ti brain-ag_api_1 pytest -sv
 
 coverage:
-	docker-compose run api pytest --cov=brain_app --cov-report=html tests/
+	docker exec -ti brain-ag_api_1 pytest --cov=brain_app --cov-report=html tests/
 	@echo "Abrindo relatório de coverage em htmlcov/index.html"
 	xdg-open htmlcov/index.html || open htmlcov/index.html || echo "Abra htmlcov/index.html manualmente"
