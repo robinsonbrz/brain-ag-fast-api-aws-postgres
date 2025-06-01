@@ -95,6 +95,53 @@ Depois, abra o arquivo `htmlcov/index.html` no navegador para visualizar o relat
 
 ---
 
+## 🛠️ Comandos úteis com Makefile
+
+Para facilitar o gerenciamento do projeto, criei um `Makefile` com os comandos principais. Abaixo, como utilizá-los:
+
+### Build e start dos containers Docker
+
+```bash
+make build
+```
+
+* Este comando irá parar qualquer container rodando e recriar os containers da aplicação e banco (modo detached).
+
+### Parar os containers
+
+```bash
+make stop
+```
+
+* Encerra e remove os containers Docker relacionados ao projeto.
+
+### Executar os testes
+
+```bash
+make test
+```
+
+* Roda os testes dentro do container `api` com saída detalhada.
+
+### Gerar relatório de cobertura e abrir no navegador - (abre html automaticamente Linux/Mac xdg)
+
+```bash
+make coverage
+```
+
+* Executa os testes com cobertura de código, gera relatório em HTML e tenta abrir automaticamente no navegador.
+* Caso o navegador não abra automaticamente, acesse o arquivo manualmente em `htmlcov/index.html`.
+
+---
+
+### Observações
+
+* Para que os comandos funcionem, certifique-se de estar na raiz do projeto, onde está o `Makefile` e o `docker-compose.yml`.
+* O comando `make coverage` requer que você tenha um navegador padrão configurado no sistema para abrir o relatório HTML automaticamente.
+* Se estiver usando Windows, o comando `xdg-open` pode não funcionar — abra o arquivo manualmente no caminho acima.
+
+---
+
 ## ⚙️ Estrutura do Projeto
 
 ```
@@ -130,7 +177,7 @@ DATABASE_URL=postgresql://postgres.password:odsood0d034o3lk@aws-0-us-east-1.pool
 ## 📞 Contato
 
   <div>
-  <h1 align="center"> Contact </h1> 
+   
   <div align="center">
     <table>
         </tr>

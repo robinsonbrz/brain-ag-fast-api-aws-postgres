@@ -16,7 +16,6 @@ clear && pytest -s  tests
 
 #TODO teste put com areas incompativeis
 
-# Makefile para testes e build dos containers
 
 
 pytest --cov=brain_app --cov-report=term tests/

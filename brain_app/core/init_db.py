@@ -12,6 +12,6 @@ def init_db():
     create_schema(schema)
     models.Base.metadata.create_all(bind=engine)
 
-if __name__ == "__main__":
-    init_db()
-    print("Schema e tabelas criados com sucesso.")
+# if __name__ == "__main__":
+#     init_db()
+#     print("Schema e tabelas criados com sucesso.")
