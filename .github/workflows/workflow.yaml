@@ -39,7 +39,8 @@ jobs:
     - name: Terraform Plan
       env:
         TF_LOG: DEBUG
-      run: terraform plan -no-color -input=false
+      run: terraform plan -no-color -input=false -var="database_url=${{ secrets.DATABASE_URL }}"
+
 
 
     - name: Terraform Apply
