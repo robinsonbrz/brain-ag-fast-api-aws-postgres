@@ -6,7 +6,7 @@ from brain_app.core.dependencies import get_db
 from brain_app.core.logging_config import logger
 import traceback
 
-router = APIRouter(prefix="/fazendas", tags=["fazendas"])
+router = APIRouter()
 
 @router.get("/", response_model=list[FazendaRead])
 def list_fazendas(skip: int = Query(0, ge=0), limit: int = Query(100, gt=0), db: Session = Depends(get_db)):
