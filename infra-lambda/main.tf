@@ -38,7 +38,7 @@ locals {
 
 resource "null_resource" "image" {
   triggers = {
-    hash = md5(join("-", [for x in fileset("", "../{*.py,*.txt,Dockerfile}") : filemd5(x)]))
+    hash = md5(join("-", [for x in fileset("", "../brain_app/{*.py,*.txt,Dockerfile}") : filemd5(x)]))
   }
 
   provisioner "local-exec" {
