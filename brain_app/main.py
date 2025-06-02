@@ -30,6 +30,6 @@ app.add_middleware(ExceptionLoggingMiddleware)
 async def health_check():
     return {"status": "Healthy!"}
 
-app.include_router(routes.router)
+# app.include_router(routes.router)
 
-handler = Mangum(app)
+handler = Mangum(app, lifespan="off")
