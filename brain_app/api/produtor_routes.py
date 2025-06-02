@@ -6,15 +6,15 @@ from brain_app.core.dependencies import get_db
 from brain_app.core.logging_config import logger
 import traceback
 
-router = APIRouter(prefix="/produtores", tags=["produtores"])
+router = APIRouter()
 
-@router.get("/", response_model=list[ProdutorRead])
+@router.get("/produtores", response_model=list[ProdutorRead])
 def list_produtores(skip: int = Query(0, ge=0), limit: int = Query(100, gt=0), db: Session = Depends(get_db)):
     service = ProdutorService(db)
     produtores = service.get_produtores(skip=skip, limit=limit)
     return produtores
 
-@router.get("/{cpf_cnpj}", response_model=ProdutorRead)
+@router.get("/produtores/{cpf_cnpj}", response_model=ProdutorRead)
 def get_produtor_por_cpf_cnpj(cpf_cnpj: str, db: Session = Depends(get_db)):
     service = ProdutorService(db)
     produtor = service.get_produtor_por_cpf_cnpj(cpf_cnpj)
@@ -23,7 +23,7 @@ def get_produtor_por_cpf_cnpj(cpf_cnpj: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Produtor não encontrado")
     return produtor
 
-@router.post("/", response_model=ProdutorRead, status_code=201)
+@router.post("/produtores", response_model=ProdutorRead, status_code=201)
 def create_produtor(
     produtor_create: ProdutorCreate, 
     db: Session = Depends(get_db)):
@@ -35,7 +35,7 @@ def create_produtor(
         raise HTTPException(status_code=400, detail=str(e))
     return produtor
 
-@router.put("/{cpf_cnpj}", response_model=ProdutorRead)
+@router.put("/produtores/{cpf_cnpj}", response_model=ProdutorRead)
 def update_produtor_por_cpf_cnpj(
     cpf_cnpj: str, 
     produtor_update: ProdutorUpdate, 
@@ -49,7 +49,7 @@ def update_produtor_por_cpf_cnpj(
         raise HTTPException(status_code=404, detail=str(e))
     return produtor
 
-@router.delete("/{cpf_cnpj}", status_code=204)
+@router.delete("/produtores/{cpf_cnpj}", status_code=204)
 def delete_produtor_por_cpf_cnpj(cpf_cnpj: str, db: Session = Depends(get_db)):
     service = ProdutorService(db)
     try:

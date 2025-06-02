@@ -8,13 +8,13 @@ import traceback
 
 router = APIRouter()
 
-@router.get("/", response_model=list[FazendaRead])
+@router.get("/fazendas", response_model=list[FazendaRead])
 def list_fazendas(skip: int = Query(0, ge=0), limit: int = Query(100, gt=0), db: Session = Depends(get_db)):
     service = FazendaService(db)
     fazendas = service.get_fazendas(skip=skip, limit=limit)
     return fazendas
 
-@router.get("/{fazenda_id}", response_model=FazendaRead)
+@router.get("/fazendas/{fazenda_id}", response_model=FazendaRead)
 def get_fazenda(fazenda_id: int, db: Session = Depends(get_db)):
     service = FazendaService(db)
     fazenda = service.get_fazenda(fazenda_id)
@@ -23,7 +23,7 @@ def get_fazenda(fazenda_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Fazenda não encontrada")
     return fazenda
 
-@router.post("/", response_model=FazendaRead, status_code=201)
+@router.post("/fazendas", response_model=FazendaRead, status_code=201)
 def create_fazenda(fazenda_create: FazendaCreate, db: Session = Depends(get_db)):
     try:
         service = FazendaService(db)
@@ -33,8 +33,7 @@ def create_fazenda(fazenda_create: FazendaCreate, db: Session = Depends(get_db))
         logger.error(f"Erro ao criar uma fazenda: {e}\n{traceback.format_exc()}")
         raise HTTPException(status_code=400, detail=str(e))
     
-
-@router.put("/{fazenda_id}", response_model=FazendaRead)
+@router.put("/fazendas/{fazenda_id}", response_model=FazendaRead)
 def update_fazenda(fazenda_id: int, fazenda_update: FazendaUpdate, db: Session = Depends(get_db)):
     try:
         service = FazendaService(db)
@@ -44,7 +43,7 @@ def update_fazenda(fazenda_id: int, fazenda_update: FazendaUpdate, db: Session =
         raise HTTPException(status_code=400, detail=str(e))
     return fazenda
 
-@router.delete("/{fazenda_id}", status_code=204)
+@router.delete("/fazendas/{fazenda_id}", status_code=204)
 def delete_fazenda(fazenda_id: int, db: Session = Depends(get_db)):
     try:
         service = FazendaService(db)

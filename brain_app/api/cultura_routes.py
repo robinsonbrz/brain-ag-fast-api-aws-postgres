@@ -14,7 +14,7 @@ def list_culturas(skip: int = Query(0, ge=0), limit: int = Query(100, gt=0), db:
     culturas = service.get_culturas(skip=skip, limit=limit)
     return culturas
 
-@router.get("/{cultura_id}", response_model=CulturaRead)
+@router.get("/culturas/{cultura_id}", response_model=CulturaRead)
 def get_cultura(cultura_id: int, db: Session = Depends(get_db)):
     try:
         service = CulturaService(db)
@@ -26,7 +26,7 @@ def get_cultura(cultura_id: int, db: Session = Depends(get_db)):
         logger.error(f"Erro ao solicitar uma cultura: {e}\n{traceback.format_exc()}")
         raise
 
-@router.post("/", response_model=CulturaRead, status_code=201)
+@router.post("/culturas", response_model=CulturaRead, status_code=201)
 def create_cultura(cultura_create: CulturaCreate, db: Session = Depends(get_db)):
     service = CulturaService(db)
     try:
@@ -36,7 +36,7 @@ def create_cultura(cultura_create: CulturaCreate, db: Session = Depends(get_db))
         logger.error(f"Erro ao criar uma cultura: {e}\n{traceback.format_exc()}")
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.put("/{cultura_id}", response_model=CulturaRead)
+@router.put("/culturas/{cultura_id}", response_model=CulturaRead)
 def update_cultura(cultura_id: int, cultura_update: CulturaUpdate, db: Session = Depends(get_db)):
     service = CulturaService(db)
     try:
@@ -46,7 +46,7 @@ def update_cultura(cultura_id: int, cultura_update: CulturaUpdate, db: Session =
         raise HTTPException(status_code=404, detail=str(e))
     return cultura
 
-@router.delete("/{cultura_id}", status_code=204)
+@router.delete("/culturas/{cultura_id}", status_code=204)
 def delete_cultura(cultura_id: int, db: Session = Depends(get_db)):
     service = CulturaService(db)
     try:
@@ -56,7 +56,7 @@ def delete_cultura(cultura_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail=str(e))
     return
 
-@router.get("/fazenda/{fazenda_id}", response_model=list[CulturaRead])
+@router.get("/culturas/fazenda/{fazenda_id}", response_model=list[CulturaRead])
 def get_culturas_por_fazenda(
     fazenda_id: int,
     skip: int = Query(0, ge=0),
