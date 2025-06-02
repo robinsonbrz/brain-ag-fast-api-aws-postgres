@@ -1,10 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from brain_app.core.dependencies import get_db
 from brain_app.services.dashboard_service import DashboardService
 from brain_app.schemas.dashboard_schema import DashboardResponse
-from brain_app.core.logging_config import logger
-import traceback
 
 router = APIRouter()
 
