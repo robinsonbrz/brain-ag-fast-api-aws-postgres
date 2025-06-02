@@ -104,6 +104,8 @@ docker exec -ti brain-ag_api_1 pytest --cov=brain_app --cov-report=html tests/
 ```
 
 Depois, abra o arquivo `htmlcov/index.html` no navegador para visualizar o relatório.
+
+- ![Coverage](assets/coverage.png)
 ---
 
 ## ☁️ Acesso a api - Postman ou Swagger
