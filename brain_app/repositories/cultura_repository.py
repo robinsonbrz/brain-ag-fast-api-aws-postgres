@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from brain_app.models.models import Cultura
-from brain_app.schemas.cultura_schema import CulturaCreate, CulturaUpdate
+from brain_app.schemas.cultura_schema import CulturaCreateSchema, CulturaUpdateSchema
 
 class CulturaRepository:
     def __init__(self, db: Session):
@@ -12,7 +12,7 @@ class CulturaRepository:
     def get_all(self, skip: int = 0, limit: int = 100) -> list[Cultura]:
         return self.db.query(Cultura).offset(skip).limit(limit).all()
 
-    def create(self, cultura_create: CulturaCreate) -> Cultura:
+    def create(self, cultura_create: CulturaCreateSchema) -> Cultura:
         db_cultura = Cultura(
             fazenda_id=cultura_create.fazenda_id,
             nome_cultura=cultura_create.nome_cultura,
@@ -24,7 +24,7 @@ class CulturaRepository:
         self.db.refresh(db_cultura)
         return db_cultura
 
-    def update(self, cultura_db: Cultura, cultura_update: CulturaUpdate) -> Cultura:
+    def update(self, cultura_db: Cultura, cultura_update: CulturaUpdateSchema) -> Cultura:
         if cultura_update.nome_cultura is not None:
             cultura_db.nome_cultura = cultura_update.nome_cultura
         if cultura_update.ano_safra is not None:

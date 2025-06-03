@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from brain_app.repositories.cultura_repository import CulturaRepository
-from brain_app.schemas.cultura_schema import CulturaCreate, CulturaUpdate
+from brain_app.schemas.cultura_schema import CulturaCreateSchema, CulturaUpdateSchema
 from brain_app.models.models import Cultura, Fazenda
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
@@ -18,7 +18,7 @@ class CulturaService:
     def get_culturas(self, skip: int = 0, limit: int = 100) -> list[Cultura]:
         return self.repo.get_all(skip=skip, limit=limit)
 
-    def create_cultura(self, cultura_create: CulturaCreate) -> Cultura:
+    def create_cultura(self, cultura_create: CulturaCreateSchema) -> Cultura:
         try:
             fazenda = self.db.query(Fazenda).filter(Fazenda.id == cultura_create.fazenda_id).first()
             if not fazenda:
@@ -39,7 +39,7 @@ class CulturaService:
 
 
 
-    def update_cultura(self, cultura_id: int, cultura_update: CulturaUpdate) -> Cultura:
+    def update_cultura(self, cultura_id: int, cultura_update: CulturaUpdateSchema) -> Cultura:
         cultura_db = self.repo.get_by_id(cultura_id)
         if not cultura_db:
             raise ValueError("Cultura não encontrada")
