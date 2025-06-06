@@ -6,11 +6,16 @@ from brain_app.schemas.cultura_schema import CulturaCreateSchema, CulturaUpdateS
 
 
 class TestCulturaRepository:
-    def test_get_by_id(self, db_session, monkeypatch):
+    def test_get_by_id_mocked(self, db_session, monkeypatch):
 
         repo = CulturaRepository(db_session)
         mock_cultura = Cultura(id=1, fazenda_id=1, nome_cultura="Soja", ano_safra=2023, area_plantada=50.0)
         def mock_query(*args, **kwargs):
+            '''
+            Substitui o comportamento real do SQLAlchemy por:
+            mock que sempre retorna a mock_cultura.
+            Simula a cadeia de chamadas: session.query().filter().first().
+            '''
             class MockQuery:
                 def filter(*args, **kwargs):
                     class MockFilter:
@@ -18,7 +23,7 @@ class TestCulturaRepository:
                             return mock_cultura
                     return MockFilter()
             return MockQuery()
-        
+
         monkeypatch.setattr(db_session, "query", mock_query)
         result = repo.get_by_id(1)
 

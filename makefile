@@ -7,7 +7,7 @@ stop:
 	docker-compose -f docker-compose-dev.yml down
 
 test:
-	docker exec -ti brain-ag-api pytest -sv
+	docker-compose -f docker-compose-dev.yml up -d && docker exec -ti brain-ag-api pytest -sv
 
 coverage:
 	docker exec -ti brain-ag-api pytest --cov=brain_app --cov-report=html tests/

@@ -35,8 +35,7 @@ class CulturaService:
                 )
             return self.repo.create(cultura_create)
         except IntegrityError as e:
-            raise ValueError("Cultura com mesmo nome, ano e fazenda já cadastrada.")
-
+            raise ValueError(f"Cultura com mesmo nome, ano e fazenda já cadastrada./n{e}")
 
 
     def update_cultura(self, cultura_id: int, cultura_update: CulturaUpdateSchema) -> Cultura:
