@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from brain_app.models.models import Cultura
+from brain_app.models.models import Cultura, Fazenda
 from brain_app.schemas.cultura_schema import CulturaCreateSchema, CulturaUpdateSchema
 
 class CulturaRepository:
@@ -13,6 +13,9 @@ class CulturaRepository:
         return self.db.query(Cultura).offset(skip).limit(limit).all()
 
     def create(self, cultura_create: CulturaCreateSchema) -> Cultura:
+        fazenda = self.db.query(Fazenda).filter_by(id=cultura_create.fazenda_id).first()
+        if not fazenda:
+            raise ValueError("Fazenda não encontrada")
         db_cultura = Cultura(
             fazenda_id=cultura_create.fazenda_id,
             nome_cultura=cultura_create.nome_cultura,
@@ -40,7 +43,7 @@ class CulturaRepository:
         self.db.delete(cultura_db)
         self.db.commit()
 
-    def get_by_fazenda_id(self, fazenda_id: int, skip: int = 0, limit: int = 100) -> list[Cultura]:
+    def get_culturas_by_fazenda_id(self, fazenda_id: int, skip: int = 0, limit: int = 100) -> list[Cultura]:
         return (
             self.db.query(Cultura)
             .filter(Cultura.fazenda_id == fazenda_id)

@@ -236,3 +236,5 @@ yarn-error.log*
 infra-lambda/.terraform.lock.hcl
 infra-lambda/.terraform/
 terraform_apply.sh
+!.vscode/launch.json
+!.vscode/settings.json

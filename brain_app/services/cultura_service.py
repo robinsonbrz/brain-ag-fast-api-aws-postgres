@@ -51,4 +51,4 @@ class CulturaService:
         self.repo.delete(cultura_db)
 
     def get_culturas_por_fazenda(self, fazenda_id: int, skip: int = 0, limit: int = 100) -> list[Cultura]:
-        return self.repo.get_by_fazenda_id(fazenda_id, skip, limit)
+        return self.repo.get_culturas_by_fazenda_id(fazenda_id, skip, limit)
