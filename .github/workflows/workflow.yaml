@@ -55,9 +55,7 @@ jobs:
         run: ls -la
 
       - name: Run tests
-        run: /
-          export PYTHONPATH=$(pwd)
-          pytest
+        run: pytest
         env:
           DATABASE_URL: ${{ env.DATABASE_URL }}
 
