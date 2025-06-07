@@ -23,11 +23,9 @@ dockerexec:
 
 lint:
 	@echo "\n---------- Runs isort, black and flake8. Organizing and linting code. -----------\n"
-	@echo "------------------------------- Running isort -----------------------------------\n"
-	docker exec -ti brain-ag-api isort .
-	@echo "\n--------------------------------- Running black ---------------------------------\n"
-	docker exec -ti brain-ag-api black .
-	- docker exec -ti -u root brain-ag-api chown -R app:app /app
 	@echo "\n-------------------------------- Running flake8. --------------------------------\n"
 	docker exec -ti brain-ag-api flake8 .
-	# docker exec -ti -u root brain-ag-api chown -R app:app /app
+	@echo "\n--------------------------------- Running black ---------------------------------\n"
+	docker exec -ti brain-ag-api black .
+	@echo "------------------------------- Running isort -----------------------------------\n"
+	docker exec -ti brain-ag-api isort .
