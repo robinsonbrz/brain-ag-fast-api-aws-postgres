@@ -27,7 +27,7 @@ API REST para gerenciamento de produtores rurais, fazendas e culturas plantadas.
 - Swagger
 - SQLAlchemy ORM  
 - Pydantic para validação de dados  
-- PostgreSQL (Tembo.io para produção)  
+- PostgreSQL - Supabase  
 - Docker & Docker Compose  
 - Pytest para testes  
 - AWS Lambda (preparado para deployment)
