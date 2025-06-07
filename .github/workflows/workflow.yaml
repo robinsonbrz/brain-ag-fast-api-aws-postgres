@@ -16,8 +16,6 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
           POSTGRES_DB: postgres
-        ports:
-          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -25,7 +23,7 @@ jobs:
           --health-retries 5
 
     env:
-      DATABASE_URL: postgresql://postgres:password@localhost:5432/postgres
+      DATABASE_URL: postgresql://postgres:password@localhost/postgres
 
     steps:
       - name: Checkout code
@@ -52,7 +50,7 @@ jobs:
         run: echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
 
       - name: Run tests
-        run: python -m pytest -x
+        run: python -m pytest --cov=brain_app --cov-fail-under=85 -x
         env:
           DATABASE_URL: ${{ env.DATABASE_URL }}
 
@@ -98,58 +96,3 @@ jobs:
         run: |
           terraform init
           terraform apply -auto-approve -var="database_url=$DATABASE_URL"
-
-
-
-
-# name: CI Lambda
-
-# on:
-#   push:
-#     branches: [ "main" ]
-
-# jobs:
-#   terraform-apply:
-
-#     name: 'Terraform'
-#     runs-on: ubuntu-latest
-#     environment: production
-
-#     defaults:
-#       run:
-#         shell: bash
-#         working-directory: ./infra-lambda
-
-#     steps:
-#     - name: Checkout
-#       uses: actions/checkout@v4
-
-#     - name: Setup Terraform
-#       uses: hashicorp/setup-terraform@v2
-
-#     - name: Configure AWS Credentials
-#       uses: aws-actions/configure-aws-credentials@v4
-#       with:
-#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#         aws-region: us-east-1
-
-#     - name: Terraform Init
-#       run: terraform init
-
-#     - name: Terraform Format
-#       run: terraform fmt
-
-#     - name: Terraform Plan
-#       env:
-#         TF_LOG: DEBUG
-#       run: terraform plan -no-color -input=false -var="database_url=${{ secrets.DATABASE_URL }}"
-
-
-
-#     - name: Terraform Apply
-#       env:
-#         DATABASE_URL: ${{ secrets.DATABASE_URL }}
-#       run: |
-#         terraform init
-#         terraform apply -auto-approve -var="database_url=$DATABASE_URL"
