@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      postgres:
+      db:
         image: postgres:15
         env:
           POSTGRES_USER: testuser
@@ -52,7 +52,7 @@ jobs:
         run: echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
 
       - name: Run tests
-        run: python -m pytest
+        run: python -m pytest -x
         env:
           DATABASE_URL: ${{ env.DATABASE_URL }}
 
