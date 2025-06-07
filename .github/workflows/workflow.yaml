@@ -48,12 +48,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run migrations
-        run: |
-          alembic upgrade head
-        env:
-          DATABASE_URL: ${{ env.DATABASE_URL }}
-
       - name: Run tests
         run: pytest
         env:
