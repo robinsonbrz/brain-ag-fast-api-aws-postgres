@@ -1,6 +1,7 @@
-from pydantic import BaseModel, constr, condecimal, model_validator
 from typing import Optional
-from pydantic import ConfigDict
+
+from pydantic import BaseModel, ConfigDict, condecimal, constr, model_validator
+
 
 class FazendaBase(BaseModel):
     nome_fazenda: constr(min_length=1, max_length=100)
@@ -10,14 +11,16 @@ class FazendaBase(BaseModel):
     area_agricultavel: condecimal(ge=0)
     area_vegetacao: condecimal(ge=0)
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def check_area(cls, model):
         if model.area_agricultavel + model.area_vegetacao > model.area_total:
-            raise ValueError('A soma da área agricultável e vegetação não pode ultrapassar a área total.')
+            raise ValueError("A soma da área agricultável e vegetação não pode ultrapassar a área total.")
         return model
+
 
 class FazendaCreate(FazendaBase):
     produtor_id: int
+
 
 class FazendaUpdate(BaseModel):
     nome_fazenda: Optional[constr(min_length=1, max_length=100)] = None
@@ -27,14 +30,17 @@ class FazendaUpdate(BaseModel):
     area_agricultavel: Optional[condecimal(ge=0)] = None
     area_vegetacao: Optional[condecimal(ge=0)] = None
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def check_area(cls, model):
-        if (model.area_total is not None and
-            model.area_agricultavel is not None and
-            model.area_vegetacao is not None):
+        if (
+            model.area_total is not None
+            and model.area_agricultavel is not None
+            and model.area_vegetacao is not None
+        ):
             if model.area_agricultavel + model.area_vegetacao > model.area_total:
-                raise ValueError('A soma da área agricultável e vegetação não pode ultrapassar a área total.')
+                raise ValueError("A soma da área agricultável e vegetação não pode ultrapassar a área total.")
         return model
+
 
 class FazendaRead(FazendaBase):
     id: int

@@ -1,7 +1,9 @@
 from sqlalchemy.orm import Session
+
+from brain_app.models.models import Fazenda, Produtor
 from brain_app.repositories.fazenda_repository import FazendaRepository
 from brain_app.schemas.fazenda_schema import FazendaCreate, FazendaUpdate
-from brain_app.models.models import Fazenda, Produtor
+
 
 class FazendaService:
     def __init__(self, db: Session):

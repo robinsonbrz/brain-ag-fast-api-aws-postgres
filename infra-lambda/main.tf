@@ -1,10 +1,9 @@
-# Terraform AWS Provider
 terraform {
   required_providers {
     aws = { source = "hashicorp/aws", version = "5.17.0" }
   }
 
-  # Necessário salvar o estado do terraform em um bucket S3
+
   backend "s3" {
     bucket         = "tf-state-rob-brain-ag-06-2025"
     key            = "estado/terraform.tfstate"
@@ -19,7 +18,6 @@ provider "aws" {
 }
 
 
-# --- ECR ---
 resource "aws_ecr_repository" "api" {
   name                 = "lambda-api"
   image_tag_mutability = "MUTABLE"
@@ -31,7 +29,6 @@ resource "aws_ecr_repository" "api" {
 }
 
 
-# --- Build & push image ---
 locals {
   repo_url = aws_ecr_repository.api.repository_url
 }

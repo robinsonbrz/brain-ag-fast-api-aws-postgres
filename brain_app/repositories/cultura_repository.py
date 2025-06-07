@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
+
 from brain_app.models.models import Cultura, Fazenda
 from brain_app.schemas.cultura_schema import CulturaCreateSchema, CulturaUpdateSchema
+
 
 class CulturaRepository:
     def __init__(self, db: Session):
@@ -44,10 +46,4 @@ class CulturaRepository:
         self.db.commit()
 
     def get_culturas_by_fazenda_id(self, fazenda_id: int, skip: int = 0, limit: int = 100) -> list[Cultura]:
-        return (
-            self.db.query(Cultura)
-            .filter(Cultura.fazenda_id == fazenda_id)
-            .offset(skip)
-            .limit(limit)
-            .all()
-        )
+        return self.db.query(Cultura).filter(Cultura.fazenda_id == fazenda_id).offset(skip).limit(limit).all()

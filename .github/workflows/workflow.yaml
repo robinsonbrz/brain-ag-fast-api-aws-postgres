@@ -51,7 +51,7 @@ jobs:
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
 
-      - name: Run tests
+      - name: Coverage Tests
         run: python -m pytest --cov=brain_app --cov-fail-under=85 -x
         env:
           DATABASE_URL: ${{ env.DATABASE_URL }}

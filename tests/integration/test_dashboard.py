@@ -1,9 +1,12 @@
-import pytest
-from fastapi.testclient import TestClient
-from brain_app.main import app
 from pprint import pprint
 
+import pytest
+from fastapi.testclient import TestClient
+
+from brain_app.main import app
+
 client = TestClient(app)
+
 
 @pytest.mark.order(19)
 def test_dashboard(client):

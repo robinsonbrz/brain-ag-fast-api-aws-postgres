@@ -1,22 +1,23 @@
-import pytest
-from brain_app.schemas.dashboard_schema import EstadoQuantidade, CulturaArea, UsoSoloArea, DashboardResponse
+from brain_app.schemas.dashboard_schema import CulturaArea, DashboardResponse, EstadoQuantidade, UsoSoloArea
 
-from pydantic import ValidationError
 
 def test_estado_quantidade_model():
     estado_quant = EstadoQuantidade(estado="SP", quantidade=10)
     assert estado_quant.estado == "SP"
     assert estado_quant.quantidade == 10
 
+
 def test_cultura_area_model():
     cultura_area = CulturaArea(nome_cultura="Soja", area_plantada=1500.5)
     assert cultura_area.nome_cultura == "Soja"
     assert cultura_area.area_plantada == 1500.5
 
+
 def test_uso_solo_area_model():
     uso_solo = UsoSoloArea(tipo="Agricultura", area=2000.0)
     assert uso_solo.tipo == "Agricultura"
     assert uso_solo.area == 2000.0
+
 
 def test_dashboard_response_model():
     estados = [

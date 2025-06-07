@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String, Numeric, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, ForeignKey, Integer, Numeric, String, UniqueConstraint
 from sqlalchemy.orm import relationship
+
 from brain_app.core.database import Base
+
 
 class Produtor(Base):
     __tablename__ = "produtores"
@@ -25,7 +27,7 @@ class Fazenda(Base):
     area_vegetacao = Column(Numeric(precision=12, scale=2), nullable=False)
 
     produtor = relationship("Produtor", back_populates="fazendas")
-    culturas = relationship("Cultura", back_populates="fazenda")  # Alterado de plantios para culturas
+    culturas = relationship("Cultura", back_populates="fazenda")
 
 
 class Cultura(Base):
@@ -40,5 +42,5 @@ class Cultura(Base):
     fazenda = relationship("Fazenda", back_populates="culturas")
 
     __table_args__ = (
-        UniqueConstraint('nome_cultura', 'ano_safra', 'fazenda_id', name='_culturas_ano_fazenda_uc'),
+        UniqueConstraint("nome_cultura", "ano_safra", "fazenda_id", name="_culturas_ano_fazenda_uc"),
     )

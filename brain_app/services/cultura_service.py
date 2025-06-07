@@ -1,10 +1,10 @@
-from sqlalchemy.orm import Session
-from brain_app.repositories.cultura_repository import CulturaRepository
-from brain_app.schemas.cultura_schema import CulturaCreateSchema, CulturaUpdateSchema
-from brain_app.models.models import Cultura, Fazenda
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
-from fastapi import HTTPException
+from sqlalchemy.orm import Session
+
+from brain_app.models.models import Cultura, Fazenda
+from brain_app.repositories.cultura_repository import CulturaRepository
+from brain_app.schemas.cultura_schema import CulturaCreateSchema, CulturaUpdateSchema
 
 
 class CulturaService:
@@ -31,12 +31,13 @@ class CulturaService:
             nova_area_total = area_plantada_total + cultura_create.area_plantada
             if nova_area_total > fazenda.area_agricultavel:
                 raise ValueError(
-                    f"A soma da área plantada das culturas ({nova_area_total}) ultrapassa a área agricultável da fazenda ({fazenda.area_agricultavel})."
+                    f"A soma da área plantada das culturas ({nova_area_total}) ultrapassa a área "
+                    f"agricultável da fazenda ({fazenda.area_agricultavel})."
                 )
+
             return self.repo.create(cultura_create)
         except IntegrityError as e:
             raise ValueError(f"Cultura com mesmo nome, ano e fazenda já cadastrada./n{e}")
-
 
     def update_cultura(self, cultura_id: int, cultura_update: CulturaUpdateSchema) -> Cultura:
         cultura_db = self.repo.get_by_id(cultura_id)

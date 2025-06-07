@@ -1,5 +1,6 @@
 from fastapi import APIRouter
-from brain_app.api import produtor_routes, fazenda_routes, cultura_routes, dashboard_routes
+
+from brain_app.api import cultura_routes, dashboard_routes, fazenda_routes, produtor_routes
 
 router = APIRouter()
 router.include_router(produtor_routes.router)

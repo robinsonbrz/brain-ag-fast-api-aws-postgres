@@ -1,7 +1,9 @@
 from sqlalchemy.orm import Session
+
 from brain_app.models.models import Produtor
 from brain_app.schemas.produtor_schema import ProdutorCreate, ProdutorUpdate
 from brain_app.utils.validators import limpar_mascara
+
 
 class ProdutorRepository:
     def __init__(self, db: Session):
@@ -25,7 +27,7 @@ class ProdutorRepository:
         produtor_db = self.db.query(Produtor).filter(Produtor.cpf_cnpj == cpf_cnpj_limpo).first()
         if not produtor_db:
             raise ValueError("Produtor não encontrado")
-        
+
         if produtor_update.nome_produtor:
             produtor_db.nome_produtor = produtor_update.nome_produtor
 
@@ -35,8 +37,8 @@ class ProdutorRepository:
 
     def get_by_cpf_cnpj(self, cpf_cnpj: str) -> Produtor | None:
         cpf_cnpj_limpo = limpar_mascara(cpf_cnpj)
-        return self.db.query(Produtor).filter(Produtor.cpf_cnpj == cpf_cnpj_limpo).first()    
-    
+        return self.db.query(Produtor).filter(Produtor.cpf_cnpj == cpf_cnpj_limpo).first()
+
     def delete_by_cpf_cnpj(self, cpf_cnpj: str) -> None:
         cpf_cnpj_limpo = limpar_mascara(cpf_cnpj)
         produtor_db = self.db.query(Produtor).filter(Produtor.cpf_cnpj == cpf_cnpj_limpo).first()
