@@ -5,11 +5,65 @@ on:
     branches: [ "main" ]
 
 jobs:
-  terraform-apply:
+  test:
+    name: Run tests with PostgreSQL
+    runs-on: ubuntu-latest
 
-    name: 'Terraform'
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgres://testuser:testpassword@localhost:5432/testdb
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          until pg_isready -h localhost -p 5432; do
+            echo "Waiting for PostgreSQL..."
+            sleep 1
+          done
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run migrations
+        run: |
+          alembic upgrade head
+        env:
+          DATABASE_URL: ${{ env.DATABASE_URL }}
+
+      - name: Run tests
+        run: pytest
+        env:
+          DATABASE_URL: ${{ env.DATABASE_URL }}
+
+  terraform-apply:
+    name: 'Terraform Deploy'
     runs-on: ubuntu-latest
     environment: production
+    needs: test
 
     defaults:
       run:
@@ -17,35 +71,88 @@ jobs:
         working-directory: ./infra-lambda
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
-    - name: Terraform Init
-      run: terraform init
+      - name: Terraform Init
+        run: terraform init
 
-    - name: Terraform Format
-      run: terraform fmt
+      - name: Terraform Format
+        run: terraform fmt
 
-    - name: Terraform Plan
-      env:
-        TF_LOG: DEBUG
-      run: terraform plan -no-color -input=false -var="database_url=${{ secrets.DATABASE_URL }}"
+      - name: Terraform Plan
+        env:
+          TF_LOG: DEBUG
+        run: terraform plan -no-color -input=false -var="database_url=${{ secrets.DATABASE_URL }}"
+
+      - name: Terraform Apply
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          terraform init
+          terraform apply -auto-approve -var="database_url=$DATABASE_URL"
 
 
 
-    - name: Terraform Apply
-      env:
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      run: |
-        terraform init
-        terraform apply -auto-approve -var="database_url=$DATABASE_URL"
+
+# name: CI Lambda
+
+# on:
+#   push:
+#     branches: [ "main" ]
+
+# jobs:
+#   terraform-apply:
+
+#     name: 'Terraform'
+#     runs-on: ubuntu-latest
+#     environment: production
+
+#     defaults:
+#       run:
+#         shell: bash
+#         working-directory: ./infra-lambda
+
+#     steps:
+#     - name: Checkout
+#       uses: actions/checkout@v4
+
+#     - name: Setup Terraform
+#       uses: hashicorp/setup-terraform@v2
+
+#     - name: Configure AWS Credentials
+#       uses: aws-actions/configure-aws-credentials@v4
+#       with:
+#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         aws-region: us-east-1
+
+#     - name: Terraform Init
+#       run: terraform init
+
+#     - name: Terraform Format
+#       run: terraform fmt
+
+#     - name: Terraform Plan
+#       env:
+#         TF_LOG: DEBUG
+#       run: terraform plan -no-color -input=false -var="database_url=${{ secrets.DATABASE_URL }}"
+
+
+
+#     - name: Terraform Apply
+#       env:
+#         DATABASE_URL: ${{ secrets.DATABASE_URL }}
+#       run: |
+#         terraform init
+#         terraform apply -auto-approve -var="database_url=$DATABASE_URL"
