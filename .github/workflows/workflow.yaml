@@ -48,14 +48,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Show current directory
-        run: pwd
-
-      - name: List files
-        run: ls -la
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
 
       - name: Run tests
-        run: pytest
+        run: python -m pytest
         env:
           DATABASE_URL: ${{ env.DATABASE_URL }}
 
