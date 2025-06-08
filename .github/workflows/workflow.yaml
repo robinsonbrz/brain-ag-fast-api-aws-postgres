@@ -82,7 +82,7 @@ jobs:
 
       - name: Install FastApi dependencies
         run: |
-          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
 
       - name: Coverage Tests
         run: python -m pytest --cov=brain_app --cov-fail-under=85 -x
