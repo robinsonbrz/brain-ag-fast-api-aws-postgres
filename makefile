@@ -12,9 +12,10 @@ test:
 	docker-compose -f docker-compose-dev.yml up -d && docker exec -ti brain-ag-api pytest -sv
 
 cov:
-	docker exec -ti brain-ag-api pytest --cov=brain_app -x
+	docker exec -ti brain-ag-api python -m pytest . --cov -x
 	
 opencoverage:
+	docker exec -ti brain-ag-api python -m pytest --cov-report html
 	@echo "Abrindo relatório de coverage em htmlcov/index.html"
 	xdg-open htmlcov/index.html || open htmlcov/index.html || echo "Abra htmlcov/index.html manualmente"
 
