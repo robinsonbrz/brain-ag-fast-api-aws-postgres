@@ -10,7 +10,7 @@ client = TestClient(app)
 
 class TestProdutoresIntegration:
     @pytest.mark.order(1)
-    def test_post_produtor_valido(self, client):
+    def test_post_produtor_valido(self, client, db_session):
         produtor_data = produtor_payload()
         response = client.post("/produtores/", json=produtor_data)
         produtor = response.json()
