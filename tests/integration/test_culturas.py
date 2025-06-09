@@ -4,56 +4,44 @@ import pytest
 from fastapi.testclient import TestClient
 
 from brain_app.main import app
+from tests.utils.payloads import cultura_payload, fazenda_payload, produtor_payload
 
 client = TestClient(app)
 
 
 class TestCulturasIntegration:
     @pytest.mark.order(13)
-    def test_list_culturas_vazia(self, client, db_session):
+    def test_list_culturas_vazia(self, client):
         response = client.get("/culturas/")
         assert response.status_code == 200
         assert response.json() == []
 
     @pytest.mark.order(14)
     def test_criar_produtor(self, client):
-        produtor_data = {"cpf_cnpj": "690.692.120-72", "nome_produtor": "Produtor Teste cpf fake"}
+        produtor_data = produtor_payload()
         response = client.post("/produtores/", json=produtor_data)
         pprint(response.json())
-        assert response.status_code == 201
         pytest.produtor_cpf_cnpj = response.json()["cpf_cnpj"]
         pytest.produtor_id = response.json()["id"]
+        assert response.status_code == 201
 
     @pytest.mark.order(15)
     def test_criar_fazenda(self, client):
-        fazenda_data = {
-            "produtor_id": pytest.produtor_id,
-            "nome_fazenda": "Fazenda Teste",
-            "cidade": "Cidade Teste",
-            "estado": "SP",
-            "area_total": 100.0,
-            "area_agricultavel": 50.0,
-            "area_vegetacao": 40.0,
-        }
+        fazenda_data = fazenda_payload(pytest.produtor_id)
         response = client.post("/fazendas/", json=fazenda_data)
-        assert response.status_code == 201
         fazenda = response.json()
         pytest.fazenda_id = fazenda["id"]
-        assert fazenda["nome_fazenda"] == "Fazenda Teste"
+        assert response.status_code == 201
+        assert fazenda["nome_fazenda"] == fazenda_data["nome_fazenda"]
 
     @pytest.mark.order(16)
     def test_create_cultura(self, client):
-        cultura_data = {
-            "fazenda_id": pytest.fazenda_id,
-            "nome_cultura": "Manga",
-            "ano_safra": 2025,
-            "area_plantada": 40.0,
-        }
+        cultura_data = cultura_payload(pytest.fazenda_id)
         response = client.post("/culturas/", json=cultura_data)
         cultura = response.json()
         pytest.cultura_id = cultura["id"]
         assert response.status_code == 201
-        assert response.json()["nome_cultura"] == cultura_data["nome_cultura"]
+        assert cultura["nome_cultura"] == cultura_data["nome_cultura"]
 
     @pytest.mark.order(17)
     def test_get_cultura(self, client):
@@ -65,12 +53,7 @@ class TestCulturasIntegration:
     @pytest.mark.order(18)
     def test_update_cultura(self, client):
         cultura_id = pytest.cultura_id
-        cultura_data = {
-            "fazenda_id": cultura_id,
-            "nome_cultura": "Manga",
-            "ano_safra": 2025,
-            "area_plantada": 40.0,
-        }
+        cultura_data = cultura_payload(cultura_id)
         cultura_data["nome_cultura"] = "Milho"
         res = client.put(f"/culturas/{cultura_id}", json=cultura_data)
         assert res.status_code == 200
