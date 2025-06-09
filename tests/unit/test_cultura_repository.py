@@ -54,4 +54,3 @@ class TestCulturaRepository:
         cultura_data = CulturaCreateSchema(**cultura_payload(999))
         with pytest.raises(ValueError, match="Fazenda não encontrada"):
             repo.create(cultura_data)
-
