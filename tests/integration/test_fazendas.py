@@ -41,9 +41,9 @@ class TestFazendasIntegration:
     @pytest.mark.order(11)
     def test_deletar_fazenda(self, client):
         response = client.delete(f"/fazendas/{pytest.fazenda_id}")
-        assert response.status_code == 204
         produtor_cpf_cnpj = pytest.produtor_cpf_cnpj
         response = client.delete(f"/produtores/{produtor_cpf_cnpj}")
+        assert response.status_code == 204
         assert response.status_code == 204
 
     @pytest.mark.order(12)

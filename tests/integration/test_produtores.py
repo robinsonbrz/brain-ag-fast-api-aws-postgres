@@ -1,7 +1,11 @@
 import pytest
+from fastapi.testclient import TestClient
 
+from brain_app.main import app
 from brain_app.utils.validators import limpar_mascara
 from tests.utils.payloads import produtor_payload
+
+client = TestClient(app)
 
 
 class TestProdutoresIntegration:
@@ -9,10 +13,10 @@ class TestProdutoresIntegration:
     def test_post_produtor_valido(self, client):
         produtor_data = produtor_payload()
         response = client.post("/produtores/", json=produtor_data)
-        assert response.status_code == 201
         produtor = response.json()
 
         pytest.produtor_cpf_cnpj = response.json()["cpf_cnpj"]
+        assert response.status_code == 201
         assert produtor["cpf_cnpj"] == limpar_mascara(produtor_data["cpf_cnpj"])
         assert produtor["nome_produtor"] == produtor_data["nome_produtor"]
 

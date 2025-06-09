@@ -1,5 +1,3 @@
-from pprint import pprint
-
 import pytest
 from fastapi.testclient import TestClient
 
@@ -12,9 +10,8 @@ class TestDashboardIntegration:
     @pytest.mark.order(19)
     def test_dashboard(self, client):
         response = client.get("/dashboard")
-        assert response.status_code == 200
         data = response.json()
-        pprint(data)
+        assert response.status_code == 200
         assert "total_fazendas_cadastradas" in data
         assert "total_area_registrada" in data
         assert "fazendas_por_estado" in data
