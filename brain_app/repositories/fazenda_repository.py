@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from brain_app.models.models import Fazenda
-from brain_app.schemas.fazenda_schema import FazendaCreate, FazendaUpdate
+from brain_app.schemas.fazenda_schema import FazendaCreateSchema, FazendaUpdateSchema
 
 
 class FazendaRepository:
@@ -14,7 +14,7 @@ class FazendaRepository:
     def get_all(self, skip: int = 0, limit: int = 100) -> list[Fazenda]:
         return self.db.query(Fazenda).offset(skip).limit(limit).all()
 
-    def create(self, fazenda_create: FazendaCreate) -> Fazenda:
+    def create(self, fazenda_create: FazendaCreateSchema) -> Fazenda:
         db_fazenda = Fazenda(
             produtor_id=fazenda_create.produtor_id,
             nome_fazenda=fazenda_create.nome_fazenda,
@@ -29,7 +29,7 @@ class FazendaRepository:
         self.db.refresh(db_fazenda)
         return db_fazenda
 
-    def update(self, fazenda_db: Fazenda, fazenda_update: FazendaUpdate) -> Fazenda:
+    def update(self, fazenda_db: Fazenda, fazenda_update: FazendaUpdateSchema) -> Fazenda:
         if fazenda_update.nome_fazenda is not None:
             fazenda_db.nome_fazenda = fazenda_update.nome_fazenda
         if fazenda_update.cidade is not None:

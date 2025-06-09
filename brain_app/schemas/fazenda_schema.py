@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic import BaseModel, ConfigDict, condecimal, constr, model_validator
 
 
-class FazendaBase(BaseModel):
+class FazendaBaseSchema(BaseModel):
     nome_fazenda: constr(min_length=1, max_length=100)
     cidade: constr(min_length=1, max_length=100)
     estado: constr(min_length=2, max_length=2)
@@ -18,11 +18,11 @@ class FazendaBase(BaseModel):
         return model
 
 
-class FazendaCreate(FazendaBase):
+class FazendaCreateSchema(FazendaBaseSchema):
     produtor_id: int
 
 
-class FazendaUpdate(BaseModel):
+class FazendaUpdateSchema(BaseModel):
     nome_fazenda: Optional[constr(min_length=1, max_length=100)] = None
     cidade: Optional[constr(min_length=1, max_length=100)] = None
     estado: Optional[constr(min_length=2, max_length=2)] = None
@@ -42,7 +42,7 @@ class FazendaUpdate(BaseModel):
         return model
 
 
-class FazendaRead(FazendaBase):
+class FazendaReadSchema(FazendaBaseSchema):
     id: int
     produtor_id: int
 

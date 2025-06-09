@@ -5,20 +5,28 @@ from sqlalchemy.orm import Session
 
 from brain_app.core.dependencies import get_db
 from brain_app.core.logging_config import logger
-from brain_app.schemas.produtor_schema import ProdutorCreate, ProdutorRead, ProdutorUpdate
+from brain_app.schemas.produtor_schema import (
+    ProdutorCreateSchema,
+    ProdutorReadSchema,
+    ProdutorUpdateSchema,
+)
 from brain_app.services.produtor_service import ProdutorService
 
 router = APIRouter()
 
 
-@router.get("/produtores", response_model=list[ProdutorRead])
-def list_produtores(skip: int = Query(0, ge=0), limit: int = Query(100, gt=0), db: Session = Depends(get_db)):
+@router.get("/produtores", response_model=list[ProdutorReadSchema])
+def list_produtores(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, gt=0),
+    db: Session = Depends(get_db),
+):
     service = ProdutorService(db)
     produtores = service.get_produtores(skip=skip, limit=limit)
     return produtores
 
 
-@router.get("/produtores/{cpf_cnpj}", response_model=ProdutorRead)
+@router.get("/produtores/{cpf_cnpj}", response_model=ProdutorReadSchema)
 def get_produtor_por_cpf_cnpj(cpf_cnpj: str, db: Session = Depends(get_db)):
     service = ProdutorService(db)
     produtor = service.get_produtor_por_cpf_cnpj(cpf_cnpj)
@@ -28,8 +36,8 @@ def get_produtor_por_cpf_cnpj(cpf_cnpj: str, db: Session = Depends(get_db)):
     return produtor
 
 
-@router.post("/produtores", response_model=ProdutorRead, status_code=201)
-def create_produtor(produtor_create: ProdutorCreate, db: Session = Depends(get_db)):
+@router.post("/produtores", response_model=ProdutorReadSchema, status_code=201)
+def create_produtor(produtor_create: ProdutorCreateSchema, db: Session = Depends(get_db)):
     service = ProdutorService(db)
     try:
         produtor = service.create_produtor(produtor_create)
@@ -39,9 +47,9 @@ def create_produtor(produtor_create: ProdutorCreate, db: Session = Depends(get_d
     return produtor
 
 
-@router.put("/produtores/{cpf_cnpj}", response_model=ProdutorRead)
+@router.put("/produtores/{cpf_cnpj}", response_model=ProdutorReadSchema)
 def update_produtor_por_cpf_cnpj(
-    cpf_cnpj: str, produtor_update: ProdutorUpdate, db: Session = Depends(get_db)
+    cpf_cnpj: str, produtor_update: ProdutorUpdateSchema, db: Session = Depends(get_db)
 ):
     service = ProdutorService(db)
     try:

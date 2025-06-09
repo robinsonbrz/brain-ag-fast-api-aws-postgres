@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, constr, field_validator
 from brain_app.utils.validators import limpar_mascara, validar_cnpj, validar_cpf
 
 
-class ProdutorBase(BaseModel):
+class ProdutorBaseSchema(BaseModel):
     cpf_cnpj: constr(strip_whitespace=True, min_length=11, max_length=18)
     nome_produtor: constr(strip_whitespace=True, min_length=1, max_length=100)
 
@@ -23,15 +23,15 @@ class ProdutorBase(BaseModel):
         return cpf_cnpj_limpo
 
 
-class ProdutorCreate(ProdutorBase):
+class ProdutorCreateSchema(ProdutorBaseSchema):
     pass
 
 
-class ProdutorUpdate(BaseModel):
+class ProdutorUpdateSchema(BaseModel):
     nome_produtor: Optional[constr(strip_whitespace=True, min_length=1, max_length=100)] = None
 
 
-class ProdutorRead(ProdutorBase):
+class ProdutorReadSchema(ProdutorBaseSchema):
     id: int
 
     class Model(BaseModel):

@@ -2,14 +2,14 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from brain_app.models.models import Cultura, Fazenda
-from brain_app.schemas.dashboard_schema import DashboardResponse
+from brain_app.schemas.dashboard_schema import DashboardResponseSchema
 
 
 class DashboardService:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_dashboard_data(self) -> DashboardResponse:
+    def get_dashboard_data(self) -> DashboardResponseSchema:
         total_fazendas_cadastradas = self.db.query(func.count(Fazenda.id)).scalar() or 0
         total_area_registrada = self.db.query(func.sum(Fazenda.area_total)).scalar() or 0
 
@@ -24,7 +24,7 @@ class DashboardService:
         total_agricultavel = self.db.query(func.sum(Fazenda.area_agricultavel)).scalar() or 0
         total_vegetacao = self.db.query(func.sum(Fazenda.area_vegetacao)).scalar() or 0
 
-        return DashboardResponse(
+        return DashboardResponseSchema(
             total_fazendas_cadastradas=total_fazendas_cadastradas,
             total_area_registrada=float(total_area_registrada),
             fazendas_por_estado=[{"estado": e, "quantidade": q} for e, q in fazendas_por_estado],

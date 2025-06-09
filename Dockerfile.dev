@@ -1,8 +1,9 @@
 FROM python:3.11-slim
 
-RUN mkdir -p /home/app
+RUN mkdir -p /home/src
 
 RUN groupadd app && useradd -g app app
+RUN usermod -aG app
 
 ENV APP_HOME=/home/app/src
 ENV PYTHONPATH=/home/app/src

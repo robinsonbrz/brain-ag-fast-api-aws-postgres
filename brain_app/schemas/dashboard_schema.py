@@ -3,24 +3,24 @@ from typing import List
 from pydantic import BaseModel
 
 
-class EstadoQuantidade(BaseModel):
+class EstadoQuantidadeSchema(BaseModel):
     estado: str
     quantidade: int
 
 
-class CulturaArea(BaseModel):
+class CulturaAreaSchema(BaseModel):
     nome_cultura: str
     area_plantada: float
 
 
-class UsoSoloArea(BaseModel):
+class UsoSoloAreaSchema(BaseModel):
     tipo: str
     area: float
 
 
-class DashboardResponse(BaseModel):
+class DashboardResponseSchema(BaseModel):
     total_fazendas_cadastradas: int
     total_area_registrada: float
-    fazendas_por_estado: List[EstadoQuantidade]
-    culturas_plantadas: List[CulturaArea]
-    uso_solo: List[UsoSoloArea]
+    fazendas_por_estado: List[EstadoQuantidadeSchema]
+    culturas_plantadas: List[CulturaAreaSchema]
+    uso_solo: List[UsoSoloAreaSchema]
