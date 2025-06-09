@@ -1,35 +1,10 @@
 import pytest
 from sqlalchemy.orm import Session
 
-from brain_app.models.models import Cultura, Fazenda, Produtor
+from brain_app.models.models import Cultura, Fazenda
 from brain_app.repositories.cultura_repository import CulturaRepository
 from brain_app.schemas.cultura_schema import CulturaCreateSchema
-from tests.utils.payloads import cultura_payload, fazenda_payload, produtor_payload
-
-
-@pytest.fixture
-def produtor(db_session: Session) -> Produtor:
-    produtor = Produtor(**produtor_payload())
-    db_session.add(produtor)
-    db_session.commit()
-    return produtor
-
-
-@pytest.fixture
-def fazenda(db_session: Session, produtor: Produtor) -> Fazenda:
-    fazenda = Fazenda(**fazenda_payload(produtor.id))
-    db_session.add(fazenda)
-    db_session.commit()
-    return fazenda
-
-
-@pytest.fixture(autouse=True)
-def cleanup(db_session: Session):
-    yield
-    db_session.query(Cultura).delete()
-    db_session.query(Fazenda).delete()
-    db_session.query(Produtor).delete()
-    db_session.commit()
+from tests.utils.payloads import cultura_payload
 
 
 class TestCulturaRepository:

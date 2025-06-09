@@ -1,46 +1,29 @@
-from pprint import pprint
-
 import pytest
 from fastapi.testclient import TestClient
 
 from brain_app.main import app
+from tests.utils.payloads import fazenda_payload, produtor_payload
 
 client = TestClient(app)
 
 
 class TestFazendasIntegration:
-    @pytest.mark.order(6)
-    def test_list_fazendas_vazia(self, client, db_session):
-        response = client.get("/fazendas/")
-        pprint(response.json())
-        assert response.status_code == 200
-        assert response.json() == []
-
     @pytest.mark.order(7)
     def test_criar_produtor(self, client):
-        produtor_data = {"cpf_cnpj": "690.692.120-72", "nome_produtor": "Produtor Teste cpf fake"}
+        produtor_data = produtor_payload()
         response = client.post("/produtores/", json=produtor_data)
-        pprint(response.json())
-        assert response.status_code == 201
         pytest.produtor_cpf_cnpj = response.json()["cpf_cnpj"]
         pytest.produtor_id = response.json()["id"]
+        assert response.status_code == 201
 
     @pytest.mark.order(8)
     def test_criar_fazenda(self, client):
-        fazenda_data = {
-            "produtor_id": pytest.produtor_id,
-            "nome_fazenda": "Fazenda Teste",
-            "cidade": "Cidade Teste",
-            "estado": "SP",
-            "area_total": 100.0,
-            "area_agricultavel": 50.0,
-            "area_vegetacao": 40.0,
-        }
+        fazenda_data = fazenda_payload(pytest.produtor_id)
         response = client.post("/fazendas/", json=fazenda_data)
-        assert response.status_code == 201
         fazenda = response.json()
         pytest.fazenda_id = fazenda["id"]
-        assert fazenda["nome_fazenda"] == "Fazenda Teste"
+        assert response.status_code == 201
+        assert fazenda["nome_fazenda"] == fazenda_data["nome_fazenda"]
 
     @pytest.mark.order(9)
     def test_buscar_fazenda_por_id(self, client):

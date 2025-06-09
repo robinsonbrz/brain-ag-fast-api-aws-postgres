@@ -1,16 +1,14 @@
-from pprint import pprint
-
 import pytest
 
 from brain_app.utils.validators import limpar_mascara
+from tests.utils.payloads import produtor_payload
 
 
 class TestProdutoresIntegration:
     @pytest.mark.order(1)
-    def test_post_produtor_valido(self, client, db_session):
-        produtor_data = {"cpf_cnpj": "690.692.120-72", "nome_produtor": "Produtor Teste cpf fake"}
+    def test_post_produtor_valido(self, client):
+        produtor_data = produtor_payload()
         response = client.post("/produtores/", json=produtor_data)
-        pprint(response.json())
         assert response.status_code == 201
         produtor = response.json()
 

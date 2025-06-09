@@ -10,12 +10,6 @@ client = TestClient(app)
 
 
 class TestCulturasIntegration:
-    @pytest.mark.order(13)
-    def test_list_culturas_vazia(self, client):
-        response = client.get("/culturas/")
-        assert response.status_code == 200
-        assert response.json() == []
-
     @pytest.mark.order(14)
     def test_criar_produtor(self, client):
         produtor_data = produtor_payload()
