@@ -69,7 +69,7 @@ DATABASE_URL=postgresql://postgres:password@db:5432/postgres
 ```bash
 docker-compose -f docker-compose-dev.yml down
 docker-compose -f docker-compose-dev.yml up -d --build
-docker exec -ti brain-ag_api_1 uvicorn brain_app.main:app --host 0.0.0.0 --port 8000 --reload
+docker exec -ti brain-ag-api uvicorn brain_app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 4. Acesse a API em: `http://localhost:8000`
@@ -88,7 +88,7 @@ Comandos para rodar os testes:
 - Rodar todos os testes e mostrar saída detalhada:
 
 ```bash
-docker exec -ti brain-ag_api_1 pytest -sv
+docker exec -ti brain-ag-api pytest -sv
 ```
 
 - Rodar testes com relatório de cobertura no terminal:
@@ -100,7 +100,7 @@ pytest --cov=brain_app --cov-report=term tests/
 - Gerar relatório de cobertura em HTML:
 
 ```bash
-docker exec -ti brain-ag_api_1 pytest --cov=brain_app --cov-report=html tests/
+docker exec -ti brain-ag-api pytest --cov=brain_app --cov-report=html tests/
 ```
 
 Depois, abra o arquivo `htmlcov/index.html` no navegador para visualizar o relatório.
@@ -152,6 +152,12 @@ make coverage
 
 * Executa os testes com cobertura de código, gera relatório em HTML e tenta abrir automaticamente no navegador.
 * Caso o navegador não abra automaticamente, acesse o arquivo manualmente em `htmlcov/index.html`.
+
+---
+
+### DER - Diagrama entidade relacionamento - Banco de dados brain-ag
+
+- ![Url Lambda](assets/DER-brain-ag.png)
 
 ---
 

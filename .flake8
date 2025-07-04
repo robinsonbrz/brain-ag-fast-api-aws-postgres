@@ -20,4 +20,4 @@ exclude =
 max-complexity = 15
 max-line-length = 110
 import-order-style = google
-application-import-names = flake8
+application-import-names = brain_app
